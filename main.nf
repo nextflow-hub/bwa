@@ -16,7 +16,8 @@ params
 params.resultsDir = 'results/bwa'
 params.saveMode = 'copy'
 params.filePattern = "./*_{R1,R2}.fastq.gz"
-
+params.mem = false
+params.index = false
 params.refFasta = "NC000962_3.fasta"
 
 Channel.value("$workflow.launchDir/$params.refFasta")
@@ -76,7 +77,7 @@ process bwaMem {
     TAG="@RG\tID:$genomeFileName\tSM:$genomeFileName\tLB:$genomeFileName"
 
     """
-    bwa mem -R $TAG $params.refFasta $genomeReads[0] $genomeReads[1] 
+    bwa mem -R /"$TAG/" $params.refFasta $genomeReads[0] $genomeReads[1] 
     """
 }
 
