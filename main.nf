@@ -1,4 +1,5 @@
 #!/usr/bin/env nextflow
+import java.nio.file.Paths
 
 /*
 #==============================================
@@ -68,8 +69,8 @@ process bwaMem {
     params.mem
 
     input:
-    path("""${params.bwaIndexResultsDir}""") from Channel.fromPath("""${params.bwaIndexResultsDir}""")
-    path("""${params.samtoolsFaidxResultsDir}""") from Channel.fromPath("""${params.samtoolsFaidxResultsDir}""")
+    path("""${params.bwaIndexResultsDir}""") from Channel.value(Paths.get(params.bwaIndexResultsDir))
+    path("""${params.samtoolsFaidxResultsDir}""") from Channel.value(Paths.get(params.samtoolsFaidxResultsDir))
     path refFasta from ch_refFasta
     set genomeFileName, file(genomeReads) from ch_in_bwa
 
