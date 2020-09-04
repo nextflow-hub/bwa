@@ -13,41 +13,41 @@ params
 #==============================================
 */
 
-params.resultsDir = 'results/FIXME'
+params.resultsDir = 'results/bwa'
 params.saveMode = 'copy'
 params.filePattern = "./*_{R1,R2}.fastq.gz"
 
-
-ch_refFILE = Channel.value("$baseDir/refFILE")
-
-
+params.refFasta = "NC000962_3.fasta"
 
 Channel.fromFilePairs(params.filePattern)
-        .into { ch_in_PROCESS }
+        .into { ch_in_bwa }
+
+Channel.value("$workflow.launchDir/$params.refFasta")
+        .set { ch_refFasta }
 
 /*
 #==============================================
-PROCESS
+bwa
 #==============================================
 */
 
-process PROCESS {
+process bwa {
     publishDir params.resultsDir, mode: params.saveMode
-    container 'FIXME'
+    container 'bwa'
 
 
     input:
-    set genomeFileName, file(genomeReads) from ch_in_PROCESS
+    set genomeFileName, file(genomeReads) from ch_in_bwa
 
     output:
-    path FIXME into ch_out_PROCESS
+    path bwa into ch_out_bwa
 
 
     script:
     genomeName = genomeFileName.toString().split("\\_")[0]
 
     """
-    CLI PROCESS
+    bwa index $params.refFasta
     """
 }
 
