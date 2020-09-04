@@ -13,10 +13,13 @@ params
 #==============================================
 */
 
-params.resultsDir = 'results/bwa'
+params.bwaIndexResultsDir = 'results/bwa/index'
+params.bwaMemResultsDir = 'results/bwa/mem'
+params.samtoolsFaidxResultsDir = 'results/samtools/faidx'
 params.saveMode = 'copy'
 params.filePattern = "./*_{R1,R2}.fastq.gz"
-
+params.mem = false
+params.index = false
 params.refFasta = "NC000962_3.fasta"
 
 Channel.value("$workflow.launchDir/$params.refFasta")
@@ -32,9 +35,11 @@ bwa
 */
 
 process bwaIndex {
-    publishDir params.resultsDir, mode: params.saveMode
+    publishDir params.bwaIndexResultsDir, mode: params.saveMode
     container 'quay.io/biocontainers/bwa:0.7.17--hed695b0_7'
 
+    when:
+    params.index
 
     input:
     path refFasta from ch_refFasta
@@ -44,13 +49,41 @@ process bwaIndex {
             file('*.ann'),
             file('*.bwt'),
             file('*.pac'),
-            file('*.sa') into ch_out_bwa
+            file('*.sa') into ch_out_bwaIndex
 
 
     script:
 
     """
     bwa index $params.refFasta
+    """
+}
+
+
+process bwaMem {
+    publishDir params.bwaMemResultsDir, mode: params.saveMode
+    container 'quay.io/biocontainers/bwa:0.7.17--hed695b0_7'
+
+    when:
+    params.mem
+
+    input:
+    path("""${params.bwaIndexResultsDir}""") from Channel.fromPath("""${params.bwaIndexResultsDir}""")
+    path("""${params.samtoolsFaidxResultsDir}""") from Channel.fromPath("""${params.samtoolsFaidxResultsDir}""")
+    path refFasta from ch_refFasta
+    set genomeFileName, file(genomeReads) from ch_in_bwa
+
+    output:
+    file('*.bam') into ch_out_bwaMem
+
+
+    script:
+    TAG="@RG\\tID:$genomeFileName\\tSM:$genomeFileName\\tLB:$genomeFileName"
+
+    """
+    cp ${params.bwaIndexResultsDir}/* .
+    cp ${params.samtoolsFaidxResultsDir}/* .
+    bwa mem -R \"${TAG}\" ${params.refFasta} ${genomeReads[0]} ${genomeReads[1]} > ${genomeFileName}.bam
     """
 }
 
