@@ -43,7 +43,6 @@ process bwaIndex {
     tuple file('*.amb'),
             file('*.ann'),
             file('*.bwt'),
-            file('*.fai'),
             file('*.pac'),
             file('*.sa') into ch_out_bwa
 
