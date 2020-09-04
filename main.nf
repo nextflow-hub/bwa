@@ -31,13 +31,13 @@ bwa
 #==============================================
 */
 
-process bwa {
+process bwaIndex {
     publishDir params.resultsDir, mode: params.saveMode
     container 'quay.io/biocontainers/bwa:0.7.17--hed695b0_7'
 
 
     input:
-    set genomeFileName, file(genomeReads) from ch_in_bwa
+    path refFasta from ch_refFasta
 
     output:
     tuple file('*.amb'),
