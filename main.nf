@@ -49,7 +49,6 @@ process bwaIndex {
 
 
     script:
-    genomeName = genomeFileName.toString().split("\\_")[0]
 
     """
     bwa index $params.refFasta
