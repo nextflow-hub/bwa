@@ -77,7 +77,7 @@ process bwaMem {
     TAG="@RG\\tID:$genomeFileName\\tSM:$genomeFileName\\tLB:$genomeFileName"
 
     """
-    bwa mem -R \"$TAG\" $params.refFasta $genomeReads[0] $genomeReads[1] 
+    bwa mem -R \"${TAG}\" ${params.refFasta} ${genomeReads[0]} ${genomeReads[1]}
     """
 }
 
