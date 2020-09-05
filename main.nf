@@ -14,14 +14,17 @@ params
 #==============================================
 */
 
+params.mem = false
+params.index = false
+
 params.bwaIndexResultsDir = 'results/bwa/index'
 params.bwaMemResultsDir = 'results/bwa/mem'
 params.samtoolsFaidxResultsDir = 'results/samtools/faidx'
+
 params.saveMode = 'copy'
-params.filePattern = "./*_{R1,R2}.fastq.gz"
-params.mem = false
-params.index = false
+
 params.refFasta = "NC000962_3.fasta"
+params.filePattern = "./*_{R1,R2}.fastq.gz"
 
 Channel.value("$workflow.launchDir/$params.refFasta")
         .set { ch_refFasta }
