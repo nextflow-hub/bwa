@@ -65,7 +65,7 @@ nextflow run https://github.com/nextflow-hub/bwa --bwaIndexResultsDir ./path/to/
 By default, it stores the result files locally inside the `./results/bwa/mem` directory.
 
 ```
-nextflow run https://github.com/nextflow-hub/bwa --resultsDir ./path/to/custom/bwaMemResultsDir
+nextflow run https://github.com/nextflow-hub/bwa --bwaMemResultsDir ./path/to/custom/bwaMemResultsDir
 ```
 
 
@@ -79,7 +79,7 @@ nextflow run https://github.com/nextflow-hub/bwa --samtoolsFaidxResultsDir /path
 
 - `saveMode`
 
-By default, the pipeline publishes the results in the `resultsDir` by copying the relevant output.
+By default, the pipeline publishes the results by `copying` the relevant output.
 
 You can update this behavior by simply specifying the alternative such as `move` or `link` etc. 
 
