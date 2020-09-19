@@ -82,10 +82,7 @@ process mem {
 
 
     script:
-    // TAG="@RG\\tID:$genomeFileName\\tSM:$genomeFileName\\tLB:$genomeFileName"
-
-    // This alternative TAG hard-codes the PL and PM values. See https://gencore.bio.nyu.edu/variant-calling-pipeline-gatk4/ 
-    TAG="@RG\\tID:$genomeFileName\\tLB:$genomeFileName\\tPL:ILLUMINA\\tPM:HISEQ\\tSM:$genomeFileName" 
+     TAG="@RG\\tID:$genomeFileName\\tSM:$genomeFileName\\tLB:$genomeFileName"
 
     """
     cp ${params.bwaIndexResultsDir}/* .
