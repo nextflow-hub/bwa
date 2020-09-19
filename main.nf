@@ -17,8 +17,8 @@ params
 params.mem = false
 params.index = false
 
-params.bwaIndexResultsDir = './results/bwa/index'
-params.bwaMemResultsDir = './results/bwa/mem'
+params.indexResultsDir = './results/bwa/index'
+params.memResultsDir = './results/bwa/mem'
 params.samtoolsFaidxResultsDir = './results/samtools/faidx'
 
 params.saveMode = 'copy'
@@ -39,7 +39,7 @@ bwa
 */
 
 process index {
-    publishDir params.bwaIndexResultsDir, mode: params.saveMode
+    publishDir params.indexResultsDir, mode: params.saveMode
     container 'quay.io/biocontainers/bwa:0.7.17--hed695b0_7'
 
     when:
@@ -65,14 +65,14 @@ process index {
 
 
 process mem {
-    publishDir params.bwaMemResultsDir, mode: params.saveMode
+    publishDir params.memResultsDir, mode: params.saveMode
     container 'quay.io/biocontainers/bwa:0.7.17--hed695b0_7'
 
     when:
     params.mem
 
     input:
-    path("""${params.bwaIndexResultsDir}""") from Channel.value(Paths.get(params.bwaIndexResultsDir))
+    path("""${params.indexResultsDir}""") from Channel.value(Paths.get(params.indexResultsDir))
     path("""${params.samtoolsFaidxResultsDir}""") from Channel.value(Paths.get(params.samtoolsFaidxResultsDir))
     path refFasta from ch_refFasta
     set genomeFileName, file(genomeReads) from ch_in_bwa
@@ -85,7 +85,7 @@ process mem {
      TAG="@RG\\tID:$genomeFileName\\tSM:$genomeFileName\\tLB:$genomeFileName"
 
     """
-    cp ${params.bwaIndexResultsDir}/* .
+    cp ${params.indexResultsDir}/* .
     cp ${params.samtoolsFaidxResultsDir}/* .
     bwa mem -K 100000000 -Y  -R "${TAG}\" ${params.refFasta} ${genomeReads[0]} ${genomeReads[1]} > ${genomeFileName}.sam
     """
