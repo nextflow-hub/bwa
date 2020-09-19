@@ -38,7 +38,7 @@ bwa
 #==============================================
 */
 
-process bwaIndex {
+process index {
     publishDir params.bwaIndexResultsDir, mode: params.saveMode
     container 'quay.io/biocontainers/bwa:0.7.17--hed695b0_7'
 
@@ -64,7 +64,7 @@ process bwaIndex {
 }
 
 
-process bwaMem {
+process mem {
     publishDir params.bwaMemResultsDir, mode: params.saveMode
     container 'quay.io/biocontainers/bwa:0.7.17--hed695b0_7'
 
@@ -82,12 +82,15 @@ process bwaMem {
 
 
     script:
-    TAG="@RG\\tID:$genomeFileName\\tSM:$genomeFileName\\tLB:$genomeFileName"
+//    TAG="@RG\\tID:$genomeFileName\\tSM:$genomeFileName\\tLB:$genomeFileName"
+
+// This alternative TAG hard-codes the PL and PM values. See https://gencore.bio.nyu.edu/variant-calling-pipeline-gatk4/ 
+    TAG='@RG\tID:$genomeFileName\tLB:$genomeFileName\tPL:ILLUMINA\tPM:HISEQ\tSM:$genomeFileName' 
 
     """
     cp ${params.bwaIndexResultsDir}/* .
     cp ${params.samtoolsFaidxResultsDir}/* .
-    bwa mem -R \"${TAG}\" ${params.refFasta} ${genomeReads[0]} ${genomeReads[1]} > ${genomeFileName}.bam
+    bwa mem -R \"${TAG}\" ${params.refFasta} ${genomeReads[0]} ${genomeReads[1]} > ${genomeFileName}.sam
     """
 }
 
