@@ -90,7 +90,7 @@ process mem {
     """
     cp ${params.bwaIndexResultsDir}/* .
     cp ${params.samtoolsFaidxResultsDir}/* .
-    bwa mem -R \"${TAG}\" ${params.refFasta} ${genomeReads[0]} ${genomeReads[1]} > ${genomeFileName}.sam
+    bwa mem -K 100000000 -Y  -R "${TAG}\" ${params.refFasta} ${genomeReads[0]} ${genomeReads[1]} > ${genomeFileName}.sam
     """
 }
 
