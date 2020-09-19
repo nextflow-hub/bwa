@@ -30,7 +30,7 @@ Channel.value("$workflow.launchDir/$params.refFasta")
         .set { ch_refFasta }
 
 Channel.fromFilePairs(params.filePattern)
-        .set { ch_in_bwa }
+        .set { ch_in_mem }
 
 /*
 #==============================================
@@ -53,7 +53,7 @@ process index {
             file('*.ann'),
             file('*.bwt'),
             file('*.pac'),
-            file('*.sa') into ch_out_bwaIndex
+            file('*.sa') into ch_out_index
 
 
     script:
@@ -75,10 +75,10 @@ process mem {
     path("""${params.indexResultsDir}""") from Channel.value(Paths.get(params.indexResultsDir))
     path("""${params.samtoolsFaidxResultsDir}""") from Channel.value(Paths.get(params.samtoolsFaidxResultsDir))
     path refFasta from ch_refFasta
-    set genomeFileName, file(genomeReads) from ch_in_bwa
+    set genomeFileName, file(genomeReads) from ch_in_mem
 
     output:
-    file('*.sam') into ch_out_bwaMem
+    file('*.sam') into ch_out_mem
 
 
     script:
