@@ -78,13 +78,13 @@ process mem {
     set genomeFileName, file(genomeReads) from ch_in_bwa
 
     output:
-    file('*.bam') into ch_out_bwaMem
+    file('*.sam') into ch_out_bwaMem
 
 
     script:
-//    TAG="@RG\\tID:$genomeFileName\\tSM:$genomeFileName\\tLB:$genomeFileName"
+    // TAG="@RG\\tID:$genomeFileName\\tSM:$genomeFileName\\tLB:$genomeFileName"
 
-// This alternative TAG hard-codes the PL and PM values. See https://gencore.bio.nyu.edu/variant-calling-pipeline-gatk4/ 
+    // This alternative TAG hard-codes the PL and PM values. See https://gencore.bio.nyu.edu/variant-calling-pipeline-gatk4/ 
     TAG="@RG\\tID:$genomeFileName\\tLB:$genomeFileName\\tPL:ILLUMINA\\tPM:HISEQ\\tSM:$genomeFileName" 
 
     """
